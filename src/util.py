@@ -1,0 +1,4 @@
+def read(filename):
+  
+
+
