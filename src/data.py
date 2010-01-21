@@ -1,7 +1,14 @@
 from os import listdir
+import cPickle as pickle
 
-classifiers = dict( [(scam, ('scams/%s/db' % scam)) for scam in listdir('scams')] )
+classifiers = []
+responses = []
+replied = set()
 
-responses = dict( [(scam, listdir(('scams/%s/responses' % scam))) for scam in listdir('scams')] )
+def load():
+  classifiers = dict( [(scam, ('scams/%s/db' % scam)) for scam in listdir('scams')] )
+  responses = dict( [(scam, listdir(('scams/%s/responses' % scam))) for scam in listdir('scams')] )
+  replied = pickle.load('data/replied')
 
-replied = # bloom filter of email addresses, load from data file
+def save():
+  pickle.dump(replied, 'data/replied')
