@@ -12,6 +12,7 @@ class Mail():
     pass
 
   def fetch(self, folder='Inbox'):
+    # Where do we mark messages as seen?
     parser = email.parser.Parser()
     self.imap.select(folder)
     status, uids = self.imap.search(None, 'UNSEEN')

@@ -8,9 +8,9 @@ def run():
     if contacted.get(message['from']):
       logger.log("contacted", message)
     else:
-      clas = classify(message)
-      if clas:
-        response = util.read(random.choice(responses[clas]))
+      scam = classify(message)
+      if scam:
+        response = util.read(random.choice(responses[scam]))
         server.reply(message, response)
         contacted.set(message['from'])
         logger.log("classified", clas, message, response)
