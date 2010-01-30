@@ -19,10 +19,10 @@ class Mail():
     uids = uids[0].replace(' ',',')
     status, data = self.imap.fetch(uids, '(RFC822)')
     self.imap.close()
-    return [parser.parsestr(mail) for (uid, mail) in data[::2]]
+    return [(uid.split()[0], parser.parsestr(mail)) for (uid, mail) in data[::2]]
 
   def send(self, message):
-    smtp.sendmail(self.user, message['To'], message.as_string())  
+    self.smtp.sendmail(self.user, message['To'], message.as_string())  
 
   def reply(self, message, text):
     reply = MIMEMultipart()
@@ -46,6 +46,12 @@ class Mail():
   def disconnect(self):
     self.imap.logout()
     self.smtp.quit()
+
+  def seen(self, uid, folder='Inbox'):
+    self.imap.select(folder)
+    self.imap.store(uid, '+FLAGS', r'\Seen')
+    self.imap.close()
+
 
 class GMail(Mail):
   def __init__(self, user, password):

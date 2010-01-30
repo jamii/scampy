@@ -4,11 +4,8 @@ from settings import server
 cutoff = 0.95
 
 def classify(text):
-  score, scam = max[(classifier.score(text), scam) for (classifier, scam) in data.classifiers.items()]
-  if score > cutoff:
-    return scam
-  else:
-    return None
+  scores = [(classifier.score(text), scam) for (classifier, scam) in data.classifiers.items()]
+  scams = [scam for (score, scam) in scores if score > cutoff]
 
 def train():
   for scam in data.scams:

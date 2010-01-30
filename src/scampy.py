@@ -1,21 +1,32 @@
-from config import server, logger
+from settings import server, logger
 from classify import classify
-from data import contacted, reponses
+import data
+import random
 import util
 
 def run():
-  for message in server.messages():
-    if contacted.get(message['from']):
-      logger.log("contacted", message)
-    else:
-      scam = classify(message)
-      if scam:
-        response = util.read(random.choice(responses[scam]))
-        server.reply(message, response)
-        contacted.set(message['from'])
-        logger.log("classified", clas, message, response)
+  data.load()
+  server.connect()
+  for (uid, message) in server.fetch()[:50]:
+    try:
+      if message['from'] in data.contacted:
+        logger.log("contacted", message)
       else:
-        logger.log("unclassified", message)
+        scams = classify(message)
+        if scams:
+          scam = random.choice(scams)
+          response = random.choice(data.responses[scam])
+        else:
+          response = random.choice(data.default)
+        response = response.lstrip().rstrip()
+        server.reply(message, response)
+        data.contacted.add(message['from'])
+        logger.log("classified", str(scams), message.as_string(), response)
+        server.seen(uid)
+    except Exception, e:
+      print e
+  server.disconnect()
+  data.save()
       
 if __name__ == '__main__':
   run()
