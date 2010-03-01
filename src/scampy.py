@@ -18,7 +18,6 @@ def run():
           response = random.choice(data.responses[scam])
         else:
           response = random.choice(data.default)
-        response = response.lstrip().rstrip()
         server.reply(message, response)
         data.contacted.add(message['from'])
         logger.log("classified", str(scams), message.as_string(), response)

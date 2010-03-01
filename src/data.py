@@ -18,11 +18,16 @@ def classifier(scam, mode='c'):
   # Might have to first create the folder/file
   return hammie.open(('scams/%s/db' % scam), mode)
 
+def load_responses(scam):
+  responses = read(('scams/%s/responses' % scam)).split('###')
+  responses = [response.lstrip().rstrip() for response in responses]
+  return [response for response in responses if response != ""]
+
 def load():
   global scams, classifiers, responses, default, contacted
   scams = [scam for scam in listdir('scams') if isdir(('scams/%s' % scam))]
   classifiers = dict( [(scam, classifier(scam)) for scam in scams] )
-  responses = dict( [(scam, read(('scams/%s/responses' % scam)).split('###')) for scam in scams] )
+  responses = [(scam, load_responses(scam)) for scam in scams]
   default = read('scams/responses').split('###')
   try:
     contactFile = open('data/contacted','r')
