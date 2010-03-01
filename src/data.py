@@ -24,9 +24,12 @@ def load():
   classifiers = dict( [(scam, classifier(scam)) for scam in scams] )
   responses = dict( [(scam, read(('scams/%s/responses' % scam)).split('###')) for scam in scams] )
   default = read('scams/responses').split('###')
-  contactFile = open('data/contacted','r')
-  contacted = pickle.load(contactFile)
-  contactFile.close()
+  try:
+    contactFile = open('data/contacted','r')
+    contacted = pickle.load(contactFile)
+    contactFile.close()
+  except IOError:
+    pass # data/contacted doesnt yet exist, leave contacted as empty set
 
 def save():
   for scam, classifier in classifiers:
