@@ -1,8 +1,6 @@
 from server import Mail, GMail
-import getpass
 import util
 
-# server = GMail(getpass.getpass('GMail address: '), getpass.getpass('GMail password: '))
-server = GMail('', '')
+server = GMail(raw_input('GMail address: '), raw_input('GMail password: '))
 
 logger = util.ConsoleLogger()

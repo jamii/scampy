@@ -9,9 +9,9 @@ def run():
   server.connect()
   for (uid, message) in server.fetch()[:50]:
     try:
-      if message['from'] in data.contacted:
-        logger.log("contacted", message)
-      else:
+      #if message['from'] in data.contacted:
+      #  logger.log("contacted", message)
+      #else:
         scams = classify(message)
         if scams:
           scam = random.choice(scams)

@@ -1,7 +1,11 @@
 from os import listdir
 from os.path import isdir
 import cPickle as pickle
-from spambayes import hammie
+try:
+  # Don't actually need this at the moment
+  from spambayes import hammie
+except Exception, e:
+  print "Couldn't find spambayes, probably don't care"
 from util import read
 
 scams = []
