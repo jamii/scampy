@@ -17,7 +17,10 @@ class Mail():
     self.imap.select(folder)
     status, uids = self.imap.search(None, 'UNSEEN')
     uids = uids[0].replace(' ',',')
-    status, data = self.imap.fetch(uids, '(RFC822)')
+    if uids:
+      status, data = self.imap.fetch(uids, '(RFC822)')
+    else:
+      data = []
     self.imap.close()
     return [(uid.split()[0], parser.parsestr(mail)) for (uid, mail) in data[::2]]
 
